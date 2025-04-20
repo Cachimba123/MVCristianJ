@@ -118,7 +118,7 @@ $parameters [par1, par2]
 	switch ($request_method){
 		case 'get': {
 			if (count($parameters) == 0)
-				$nombre_clase::getAll();
+				 $nombre_clase::getAll();
 			else  
 				if (count($parameters) == 1)
 					$nombre_clase::getId($parameters[0]);
