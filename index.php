@@ -35,7 +35,6 @@
 
 	$parameters = explode('/',$_GET['PATH_INFO']);
 	$recurso = $parameters[0];
-
 	//valido si el recurso es válido
 	//if (!($recurso in $recursos_validos))
 	//	exit(0);
@@ -118,24 +117,48 @@ $parameters [par1, par2]
 	switch ($request_method){
 		case 'get': {
 			if (count($parameters) == 0)
-				 $nombre_clase::getAll();
+				 print_r($nombre_clase::getAll());
 			else  
 				if (count($parameters) == 1)
-					$nombre_clase::getId($parameters[0]);
+					print_r($nombre_clase::getId($parameters[0]));
 				else
 					if (count($parameters) == 2)
-						$nombre_clase::getMany($parameters[0], $parameters[1]);
+						print_r($nombre_clase::getMany($parameters[0], $parameters[1]));
 					else
 						exit(1);
 			break;
 		}
 		case 'post':{
+			$body= file_get_contents('php://input');
+			try {
+				$body = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+			} catch (JsonException $e) {
+				http_response_code(400);
+				echo "JSON inválido: " . $e->getMessage();
+				exit;
+			}
+			print_r($nombre_clase::postNivelCarrera($body));
 			break;
 		}
 		case 'put': {
+			$body= file_get_contents('php://input');
+			try {
+				$body = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+			} catch (JsonException $e) {
+				http_response_code(400);
+				echo "JSON inválido: " . $e->getMessage();
+				exit;
+			}
+
+			if(count($parameters) == 1)
+				print_r($nombre_clase::putNivelesCarrera($parameters[0],$body));
 			break;
 		}
 		case 'delete': {
+			if(count($parameters) == 1)
+				print_r($nombre_clase::deleteNivelesCarrera($parameters[0]));
+			else
+				exit(1);
 			break;
 		}
 		default:{
@@ -145,7 +168,6 @@ $parameters [par1, par2]
 	} //switch
 
 	/*
-
 	//$resultado = call_user_func_array('modificar_variable_global', array(&$mi_variable_global, 2));
 	
 
